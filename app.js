@@ -1,5 +1,6 @@
 // DEPENDENCIES
-
+const express = require("express");
+const app = express();
 
 
 // CONFIGURATION
@@ -10,4 +11,5 @@
 // ROUTES
 
 // EXPORT
+module.exports = app;
 
