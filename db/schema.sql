@@ -5,12 +5,13 @@ CREATE DATABASE snack_a_log;
 
 CREATE TABLE snacks (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    fiber INT, 
-    protein INT, 
-    added_sugar INT, 
+    name VARCHAR(255) NOT NULL,
+    fiber INT NOT NULL, 
+    protein INT NOT NULL, 
+    added_sugar INT  NOT NULL DEFAULT 0, 
     is_healthy BOOLEAN, 
-    image VARCHAR(255));
+    image VARCHAR(255)
+);
 
 
 
