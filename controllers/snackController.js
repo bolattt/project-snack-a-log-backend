@@ -15,6 +15,10 @@ const { getAllSnacks, getOneSnack } = require("../queries/snacks");
 //   res.json(snack);
 // });
 
+function formatName(name) {
+  return name.split(" ").map((word) => word[0].toUpperCase() + word.slice(1));
+}
+
 snacks.get("/", async (req, res) => {
   try {
     const snacks = await getAllSnacks();
