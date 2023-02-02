@@ -1,6 +1,9 @@
 const express = require("express");
 const snacks = express.Router();
-const { getAllSnacks, getOneSnack } = require("../queries/snacks");
+const { getAllSnacks, getOneSnack, updateOneSnack } = require("../queries/snacks");
+// const pgp = require('pg-promise')();
+
+// const db = pgp('postgres://localhost/yourdatabase');
 
 // const db = require("../db/dbConfig");
 
@@ -37,5 +40,23 @@ snacks.get("/:id", async (req, res) => {
     res.status(404).json({ error: "That Snack doesn't exist!!" });
   }
 });
+
+
+snacks.put('/:id', async (req, res) => {
+  try {
+console.log(req.body)
+
+  const id = req.params.id;
+const snack = req.body
+ const updatethesnack =  await updateOneSnack(id, snack);
+ res.json(updatethesnack);
+  }catch (error) {
+    console.log(error)
+    res.status(400).json({ error: "Cannot update Snack" });
+  }
+});
+
+
+
 
 module.exports = snacks;
