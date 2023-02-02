@@ -52,9 +52,9 @@ snacks.post("/", async (req, res) => {
       newSnack.protein >= 5 &&
       newSnack.added_sugar <= 5
     ) {
-      newSnack.is_healthy = "true";
+      newSnack.is_healthy = true;
     } else {
-      newSnack.is_healthy = "false";
+      newSnack.is_healthy = false;
     }
 
     res.json(newSnack);
