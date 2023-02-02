@@ -1,22 +1,10 @@
 const express = require("express");
 const snacks = express.Router();
-const { getAllSnacks, getOneSnack, updateOneSnack } = require("../queries/snacks");
-// const pgp = require('pg-promise')();
 
-// const db = pgp('postgres://localhost/yourdatabase');
+const { getAllSnacks, getOneSnack, updateOneSnack, deleteSnack, createSnack } = require("../queries/snacks");
 
-// const db = require("../db/dbConfig");
 
-// snacks.get("/", async (req, res) => {
-//   const snacksList = await db.any("SELECT * FROM snacks");
-//   res.send(snacksList);
-// });
-
-// snacks.get("/:id", async (req, res) => {
-//   const id = req.params.id;
-//   const snack = await db.oneOrNone("SELECT * FROM snacks WHERE id = $1", id);
-//   res.json(snack);
-// });
+snacks.use(express.json());
 
 function formatName(name) {
   return name.split(" ").map((word) => word[0].toUpperCase() + word.slice(1));
@@ -42,21 +30,50 @@ snacks.get("/:id", async (req, res) => {
 });
 
 
+
 snacks.put('/:id', async (req, res) => {
   try {
-console.log(req.body)
-
-  const id = req.params.id;
-const snack = req.body
- const updatethesnack =  await updateOneSnack(id, snack);
- res.json(updatethesnack);
+    const id = req.params.id;
+    const snack = req.body
+    const updatethesnack =  await updateOneSnack(id, snack);
+    res.json(updatethesnack);
   }catch (error) {
-    console.log(error)
     res.status(400).json({ error: "Cannot update Snack" });
   }
 });
 
 
+
+snacks.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedSnack = await deleteSnack(id);
+    res.json(deletedSnack);
+  } catch (error) {
+    res.status(400).json({ error: "Something went wrong!" });
+  }
+});
+
+snacks.post("/", async (req, res) => {
+  try {
+    const createdSnack = await createSnack(req.body);
+    const newSnack = createdSnack;
+
+    if (
+      newSnack.fiber >= 5 &&
+      newSnack.protein >= 5 &&
+      newSnack.added_sugar <= 5
+    ) {
+      newSnack.is_healthy = true;
+    } else {
+      newSnack.is_healthy = false;
+    }
+
+    res.json(newSnack);
+  } catch (error) {
+    res.status(400).json({ error: `Malformed post body: ${req.body}` });
+  }
+});
 
 
 module.exports = snacks;
