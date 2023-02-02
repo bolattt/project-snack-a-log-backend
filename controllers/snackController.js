@@ -1,6 +1,13 @@
 const express = require("express");
 const snacks = express.Router();
-const { getAllSnacks, getOneSnack, deleteSnack } = require("../queries/snacks");
+const {
+  getAllSnacks,
+  getOneSnack,
+  deleteSnack,
+  createSnack,
+} = require("../queries/snacks");
+
+snacks.use(express.json());
 
 function formatName(name) {
   return name.split(" ").map((word) => word[0].toUpperCase() + word.slice(1));
@@ -32,6 +39,27 @@ snacks.delete("/:id", async (req, res) => {
     res.json(deletedSnack);
   } catch (error) {
     res.status(400).json({ error: "Something went wrong!" });
+  }
+});
+
+snacks.post("/", async (req, res) => {
+  try {
+    const createdSnack = await createSnack(req.body);
+    const newSnack = createdSnack;
+
+    if (
+      newSnack.fiber >= 5 &&
+      newSnack.protein >= 5 &&
+      newSnack.added_sugar <= 5
+    ) {
+      newSnack.is_healthy = true;
+    } else {
+      newSnack.is_healthy = false;
+    }
+
+    res.json(newSnack);
+  } catch (error) {
+    res.status(400).json({ error: `Malformed post body: ${req.body}` });
   }
 });
 
