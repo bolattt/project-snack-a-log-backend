@@ -8,7 +8,7 @@ CREATE TABLE snacks (
     name VARCHAR(255) NOT NULL,
     fiber INT NOT NULL, 
     protein INT NOT NULL, 
-    added_sugar INT  NOT NULL DEFAULT 0, 
+    added_sugar INT,
     is_healthy BOOLEAN, 
     image VARCHAR(255)
 );
