@@ -7,10 +7,7 @@ const {
   deleteSnack,
   createSnack,
 } = require("../queries/snacks");
-
-function formatName(name) {
-  return name.split(" ").map((word) => word[0].toUpperCase() + word.slice(1));
-}
+const checkSnack = require("../utils/snackCheck");
 
 snacks.get("/", async (req, res) => {
   try {
@@ -36,9 +33,9 @@ snacks.get("/:id", async (req, res) => {
 snacks.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const snack = req.body;
-    const updatethesnack = await updateOneSnack(id, snack);
-    res.json(updatethesnack);
+    const snack = checkSnack(req.body);
+    const updatedsnack = await updateOneSnack(id, snack);
+    res.json(updatedsnack);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: "Cannot update Snack" });
@@ -58,20 +55,9 @@ snacks.delete("/:id", async (req, res) => {
 
 snacks.post("/", async (req, res) => {
   try {
-    const createdSnack = await createSnack(req.body);
-    const newSnack = createdSnack;
-
-    if (
-      newSnack.fiber >= 5 &&
-      newSnack.protein >= 5 &&
-      newSnack.added_sugar <= 5
-    ) {
-      newSnack.is_healthy = true;
-    } else {
-      newSnack.is_healthy = false;
-    }
-
-    res.json(newSnack);
+    const snack = checkSnack(req.body);
+    const createdSnack = await createSnack(snack);
+    res.json(createdSnack);
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: `Malformed post body: ${req.body}` });

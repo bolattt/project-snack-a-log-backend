@@ -1,11 +1,3 @@
-// DEPENDENCIES
-
-// CONFIGURATION
-
-
-// LISTEN
-
-
 const app = require("./app.js");
 
 require("dotenv").config();
